@@ -80,8 +80,15 @@ public class UIdataImporter : MonoBehaviour {
 		if (CropInfoListView.SelectedIndex != -1) {
 			var selectedCropItem = dataReaderScript.cropList [CropInfoListView.SelectedIndex];
 			//var nextLevelOfSelectedCropItem;
+				int IndexOfNextLevelOfSelectedCropItem;
 
-				var nextLevelOfSelectedCropItem=dataReaderScript.cropList [CropInfoListView.SelectedIndex+1];
+				if(CropInfoListView.SelectedIndex+1<dataReaderScript.cropList.Count)
+					 IndexOfNextLevelOfSelectedCropItem=CropInfoListView.SelectedIndex+1;
+				else{
+					IndexOfNextLevelOfSelectedCropItem=CropInfoListView.SelectedIndex;
+				}
+
+				var nextLevelOfSelectedCropItem=dataReaderScript.cropList [IndexOfNextLevelOfSelectedCropItem];
 				string nextLevelTextPart;
 			if (selectedCropItem.level!=maxLevelDictionary[selectedCropItem.cropName]) {
 				 nextLevelTextPart = "\n\n\n\n\nNextLevel:"
