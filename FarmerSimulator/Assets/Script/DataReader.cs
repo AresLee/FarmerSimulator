@@ -12,8 +12,8 @@ public class DataReader : MonoBehaviour {
 	private string fileNameOfCropInfoTxt;
 	List<int> numberList;
 
-	List<Farmland> farmLandList;
-	List<Crop> cropList;
+	public List<Farmland> farmLandList;
+	public List<Crop> cropList;
 
 	// Use this for initialization
 	void Start () {
@@ -108,7 +108,7 @@ public class DataReader : MonoBehaviour {
 
 							
 							//assume Farmland information just contain two formats: LAND_ID and COST_TO_PURCHASE
-							foreach (string e in entries) {
+					foreach (string e in entries) {
 								//# in the txt is ignored
 								if(e!=""&&!e.Contains("#")){
 									
