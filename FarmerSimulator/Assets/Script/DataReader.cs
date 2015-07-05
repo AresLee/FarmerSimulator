@@ -149,31 +149,34 @@ public class DataReader : MonoBehaviour {
 			GameObject.Find ("Text1").GetComponent<Text> ().text=e.Message;
 			return false;
 		}
+
 	}
 
-	public struct Farmland{
-		public int landSpot;
-		public int costToPurchase;
-		
-		public Farmland(int _landSpot, int _costToPurchase){
-			this.landSpot = _landSpot;
-			this.costToPurchase = _costToPurchase;
-		}
+
+}
+
+public class Farmland{
+	public int landSpot;
+	public int costToPurchase;
+	
+	public Farmland(int _landSpot, int _costToPurchase){
+		this.landSpot = _landSpot;
+		this.costToPurchase = _costToPurchase;
 	}
+}
 
-	public struct Crop{
-		public string cropName;
-		public int level;
-		public int costToPlant;
-		public int cashOutputPerDay;
+public class Crop{
+	public string cropName;
+	public int level;
+	public int costToPlant;
+	public int cashOutputPerDay;
+	
+	public Crop(string _cropName,int _level,int _costToPlant, int _cashOutputPerDay){
+		this.cropName = _cropName;
+		this.level=_level;
+		this.costToPlant=_costToPlant;
+		this.cashOutputPerDay=_cashOutputPerDay;
 		
-		public Crop(string _cropName,int _level,int _costToPlant, int _cashOutputPerDay){
-			this.cropName = _cropName;
-			this.level=_level;
-			this.costToPlant=_costToPlant;
-			this.cashOutputPerDay=_cashOutputPerDay;
-
-		}
 	}
 }
 

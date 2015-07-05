@@ -11,6 +11,8 @@ public class UIdataImporter : MonoBehaviour {
 	private Text textShowingOnCropInfoTab;
 	Dictionary<string,int> maxLevelDictionary;
 
+	List<FarmLandUnitOnTheList> currentFarmLandList;
+
 //	[SerializeField]
 //	Sprite landIcon;
 
@@ -26,17 +28,30 @@ public class UIdataImporter : MonoBehaviour {
 		textShowingOnCropInfoTab = GameObject.FindGameObjectWithTag ("CropInfoTabText").GetComponent<Text> ();
 		//maxLevelDictionary stores the max level of each kind of crop
 		maxLevelDictionary=new Dictionary<string, int>();
+		//the current farmland information list
+		currentFarmLandList = new List<FarmLandUnitOnTheList> ();
+
 
 		textShowingOnCropInfoTab.text="Welcome to the Fantacsy Farmer Simulator!";
 
-		loadLandListToListView ();
+
+		loadInitialLandToListView ();
+		//	loadAllLandListToListView ();
 		loadCropListToListView ();
+
+
 
 	}
 
+	void loadInitialLandToListView(){
+		currentFarmLandList.Add(new FarmLandUnitOnTheList(true,0,dataReaderScript.farmLandList[0]));
 
+		int initialFarmlandSpotNumber = currentFarmLandList [0].farmlandInfoOfTheSpot.landSpot;
+		string initialFarmLandStatus = currentFarmLandList [0].landStatus;
+		landInfoListView.Add ("Spot" + initialFarmlandSpotNumber +"   "+initialFarmLandStatus);
+	}
 
-	void loadLandListToListView(){
+	void loadAllLandListToListView(){
 		foreach (var f in dataReaderScript.farmLandList) {
 			
 			
@@ -46,6 +61,12 @@ public class UIdataImporter : MonoBehaviour {
 		}
 	
 	}
+
+	void loadPossibleLandListToLandListView(){
+	
+	}
+
+
 
 	//this function load crop info to the listview and store the max value of each kind of crop
 	void loadCropListToListView(){
