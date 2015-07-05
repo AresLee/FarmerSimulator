@@ -117,7 +117,7 @@ public class UIdataImporter : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
-		Debug.Log ("SelectedIndex: " + CropInfoListView.SelectedIndex);
+//		Debug.Log ("SelectedIndex: " + CropInfoListView.SelectedIndex);
 		trackCropInfoListView ();
 //		var indicies = landInfoListView.SelectedIndicies;
 //		Debug.Log("indicies: "+string.Join(", ", indicies.ConvertAll(x => x.ToString()).ToArray()));

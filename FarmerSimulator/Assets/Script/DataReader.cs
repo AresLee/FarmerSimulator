@@ -37,7 +37,7 @@ public class DataReader : MonoBehaviour {
 		LoadData (fileNameOfFarmLandTxt);
 		LoadData (fileNameOfCropInfoTxt);
 
-		GameObject.Find ("Text").GetComponent<Text> ().text = "count Farm: " + farmLandList.Count + "\ncount Crop: " + cropList.Count;
+		//GameObject.Find ("Text").GetComponent<Text> ().text = "count Farm: " + farmLandList.Count + "\ncount Crop: " + cropList.Count;
 
 	}
 	
@@ -75,7 +75,7 @@ public class DataReader : MonoBehaviour {
 	private bool LoadData(string fileName)
 	{
 		fileName = Application.persistentDataPath+"/" + fileName;
-		Debug.Log (fileName);
+		//Debug.Log (fileName);
 		// Handle any problems that might arise when reading the text
 		try
 		{
