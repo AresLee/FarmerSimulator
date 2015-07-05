@@ -6,6 +6,8 @@ TagManager:
   tags:
   - CropInfoTabText
   - TimeStartButton
+  - TextOnProgressBar
+  - TextbelowProgressBar
   layers:
   - Default
   - TransparentFX
