@@ -167,11 +167,11 @@ public class DataReader : MonoBehaviour {
 		public int costToPlant;
 		public int cashOutputPerDay;
 		
-		public Crop(string _cropName,int _level,int _costToPlant, int cashOutputPerDay){
+		public Crop(string _cropName,int _level,int _costToPlant, int _cashOutputPerDay){
 			this.cropName = _cropName;
 			this.level=_level;
 			this.costToPlant=_costToPlant;
-			this.cashOutputPerDay=_costToPlant;
+			this.cashOutputPerDay=_cashOutputPerDay;
 
 		}
 	}

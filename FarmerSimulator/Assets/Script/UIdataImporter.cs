@@ -2,11 +2,14 @@
 using System.Collections;
 using UIWidgets;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class UIdataImporter : MonoBehaviour {
 	[SerializeField]
-	ListView landInfoListView;
-	ListView CropInfoListView;
+	private ListView landInfoListView;
+	private ListView CropInfoListView;
+	private Text textShowingOnCropInfoTab;
+	Dictionary<string,int> maxLevelDictionary;
 
 //	[SerializeField]
 //	Sprite landIcon;
@@ -20,9 +23,15 @@ public class UIdataImporter : MonoBehaviour {
 		landInfoListView = GameObject.Find ("LandListView").GetComponent<ListView> ();
 		CropInfoListView = GameObject.Find ("CropListView").GetComponent<ListView> ();
 		dataReaderScript = GameObject.Find ("ScriptContainer").GetComponent<DataReader> ();
+		textShowingOnCropInfoTab = GameObject.FindGameObjectWithTag ("CropInfoTabText").GetComponent<Text> ();
+		//maxLevelDictionary stores the max level of each kind of crop
+		maxLevelDictionary=new Dictionary<string, int>();
+
+		textShowingOnCropInfoTab.text="Welcome to the Fantacsy Farmer Simulator!";
 
 		loadLandListToListView ();
 		loadCropListToListView ();
+
 	}
 
 
@@ -38,25 +47,77 @@ public class UIdataImporter : MonoBehaviour {
 	
 	}
 
+	//this function load crop info to the listview and store the max value of each kind of crop
 	void loadCropListToListView(){
+
+
 		foreach (var c in dataReaderScript.cropList) {
-			
-			
-			CropInfoListView.Add (c.cropName+"    (L."+c.level+")");
+
+
+			if (!maxLevelDictionary.ContainsKey(c.cropName)) {
+
+				maxLevelDictionary.Add(c.cropName,c.level);
+			}else{
+				if (c.level>maxLevelDictionary[c.cropName]) {
+					maxLevelDictionary[c.cropName]=c.level;
+				}
+
+			}
+
+		
+				CropInfoListView.Add (c.cropName+"    (L."+c.level+")");
+		
+
+		
 			
 			
 		}
 
 	}
+
+	void trackCropInfoListView(){
+		//for tracking selecting item of cropInfoListView and show the info on the tab
+		if (CropInfoListView.SelectedIndex != -1) {
+			var selectedCropItem = dataReaderScript.cropList [CropInfoListView.SelectedIndex];
+			//var nextLevelOfSelectedCropItem;
+
+				var nextLevelOfSelectedCropItem=dataReaderScript.cropList [CropInfoListView.SelectedIndex+1];
+				string nextLevelTextPart;
+			if (selectedCropItem.level!=maxLevelDictionary[selectedCropItem.cropName]) {
+				 nextLevelTextPart = "\n\n\n\n\nNextLevel:"
+					+"\nLevel: "+nextLevelOfSelectedCropItem.level
+					+"\nCost To Plant: $"+nextLevelOfSelectedCropItem.costToPlant
+					+"\nCash Output Per Day: $" + nextLevelOfSelectedCropItem.cashOutputPerDay;
+			}else{
+
+				nextLevelTextPart="\n\n\n\n\nThis is the maximum level of this crop.";
+			}
+
+				textShowingOnCropInfoTab.text = "Crop Name: " + selectedCropItem.cropName
+					+ "\nLevel: " + selectedCropItem.level
+						+ "\nCost To Plant: $" + selectedCropItem.costToPlant
+						+ "\nCash Output Per Day: $" + selectedCropItem.cashOutputPerDay
+						+nextLevelTextPart;
+
+
+
+
+		
+		}
+	
+	}
 	
 	// Update is called once per frame
 	void Update () {
 	
-		Debug.Log ("lastSelectedIndex: " + landInfoListView.SelectedIndex);
-
+		Debug.Log ("SelectedIndex: " + CropInfoListView.SelectedIndex);
+		trackCropInfoListView ();
 //		var indicies = landInfoListView.SelectedIndicies;
 //		Debug.Log("indicies: "+string.Join(", ", indicies.ConvertAll(x => x.ToString()).ToArray()));
 
 
 	}
+
+
+
 }
