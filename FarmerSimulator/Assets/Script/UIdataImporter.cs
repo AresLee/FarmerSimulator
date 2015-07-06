@@ -15,13 +15,18 @@ public class UIdataImporter : MonoBehaviour {
 	int maxLandQuantity;
 	Text textOnBuyLandBtn;
 
+	Combobox avilableLandComboBox;
+	List<string> comboBoxStringList;
+	List<string> farmLandInfoStringList;
+
+	public bool isLandInfoListViewUpdating;
 //	[SerializeField]
 //	Sprite landIcon;
 
 
 
 	DataReader dataReaderScript;
-
+	int calculatore;
 	// Use this for initialization
 	void Start () {
 		landInfoListView = GameObject.Find ("LandListView").GetComponent<ListView> (); 
@@ -35,6 +40,9 @@ public class UIdataImporter : MonoBehaviour {
 		//the current farmland information list
 		currentFarmLandList = new List<FarmLandUnitOnTheList> ();
 		maxLandQuantity = dataReaderScript.farmLandList.Count;//start from 1
+		avilableLandComboBox = GameObject.Find ("Combobox").GetComponent<Combobox> ();
+		comboBoxStringList = new List<string> ();
+		farmLandInfoStringList = new List<string> ();
 
 
 		textShowingOnCropInfoTab.text="Welcome to the Fantacsy Farmer Simulator!";
@@ -44,7 +52,7 @@ public class UIdataImporter : MonoBehaviour {
 		//	loadAllLandListToListView ();
 		loadCropListToListView ();
 
-
+		initializedComboStringList ();
 
 	}
 
@@ -103,6 +111,8 @@ public class UIdataImporter : MonoBehaviour {
 				if (selectedFarmItem.cropInfoOfTheSpot != null) {
 					textOnBuyLandBtn.text = "Upgrade";
 
+
+
 					//add specific output for specific crop
 				} else {
 					//the land will be empty once purchasing because there is no crop on it initially
@@ -110,11 +120,11 @@ public class UIdataImporter : MonoBehaviour {
 					currentFarmLandList [landInfoListView.SelectedIndex].landStatus="<Empty>";
 					textOnBuyLandBtn.text = "Select";
 
-			
+
 				}
 
 			
-
+				updateFarmlandListView();
 			}
 
 
@@ -128,7 +138,7 @@ public class UIdataImporter : MonoBehaviour {
 //			}
 			//updateFarmlandListView();
 
-			Debug.Log(landInfoListView.ScrollRect.verticalScrollbar.size);
+
 
 		}
 	}
@@ -143,12 +153,26 @@ public class UIdataImporter : MonoBehaviour {
 //			
 //		}
 
-		int currentSelectedIndex = landInfoListView.SelectedIndex;
+		if (isLandInfoListViewUpdating) {
 
-		//get the text under the selected item on the listview
-		Text itemString=GameObject.Find("farmLand"+currentSelectedIndex+"Text").GetComponent<Text>();
-		//update the text
-		itemString.text="Spot" + currentFarmLandList[currentSelectedIndex].farmlandInfoOfTheSpot.landSpot + "   " + currentFarmLandList[currentSelectedIndex].landStatus;
+		
+			farmLandInfoStringList.Clear ();
+			foreach (FarmLandUnitOnTheList f in currentFarmLandList) {
+				farmLandInfoStringList.Add("Spot" + f.farmlandInfoOfTheSpot.landSpot + "   " + f.landStatus);
+			}
+
+			landInfoListView.Strings = farmLandInfoStringList;
+
+			isLandInfoListViewUpdating = false;
+		}
+
+	
+//		int currentSelectedIndex = landInfoListView.SelectedIndex;
+//
+//		//get the text under the selected item on the listview
+//		Text itemString=GameObject.Find("farmLand"+currentSelectedIndex+"Text").GetComponent<Text>();
+//		//update the text
+//		itemString.text="Spot" + currentFarmLandList[currentSelectedIndex].farmlandInfoOfTheSpot.landSpot + "   " + currentFarmLandList[currentSelectedIndex].landStatus;
 
 
 
@@ -219,18 +243,43 @@ public class UIdataImporter : MonoBehaviour {
 		}
 	
 	}
+
+	void updateAvilableComboBoxList(){
+	
+
+		foreach (FarmLandUnitOnTheList f in currentFarmLandList) {
+
+			if (f.isTheSpotEmpty) {
+				avilableLandComboBox.ListView.Add("Spot"+f.farmlandInfoOfTheSpot.landSpot);
+
+			}
+		}
+
+
+
+	}
+
+	void initializedComboStringList(){
+	
+		comboBoxStringList.Add("123");
+		comboBoxStringList.Add("321");
+		comboBoxStringList.Add("12345");
+		comboBoxStringList.Add("65432");
+
+
+
+	}
 	
 	// Update is called once per frame
 	void Update () {
-	
-	
+		Debug.Log ("isLandInfoListViewUpdating: " + isLandInfoListViewUpdating);
+		avilableLandComboBox.ListView.Strings = comboBoxStringList;
 
 		landInfoListView.UpdateItems ();
 		landInfoListView.UpdateItems (); 
 //		Debug.Log ("SelectedIndex: " + CropInfoListView.SelectedIndex);
 		trackCropInfoListView ();
 		trackLandInfoListView ();
-
 
 
 

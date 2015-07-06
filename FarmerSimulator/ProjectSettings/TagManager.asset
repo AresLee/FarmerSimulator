@@ -10,6 +10,7 @@ TagManager:
   - TextbelowProgressBar
   - TextOnBuyLandBtn
   - MoneyText
+  - textOnBuyCropBtn
   layers:
   - Default
   - TransparentFX
