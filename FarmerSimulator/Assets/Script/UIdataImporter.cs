@@ -20,13 +20,14 @@ public class UIdataImporter : MonoBehaviour {
 	List<string> farmLandInfoStringList;
 
 	public bool isLandInfoListViewUpdating;
+	public bool isAvilableComboBoxUpdating;
 //	[SerializeField]
 //	Sprite landIcon;
 
 
 
 	DataReader dataReaderScript;
-	int calculatore;
+
 	// Use this for initialization
 	void Start () {
 		landInfoListView = GameObject.Find ("LandListView").GetComponent<ListView> (); 
@@ -49,11 +50,15 @@ public class UIdataImporter : MonoBehaviour {
 
 
 		loadInitialLandToListView ();
-		//	loadAllLandListToListView ();
+			//loadAllLandListToListView ();
 		loadCropListToListView ();
+		loadInitialComboBox ();
+	
 
-		initializedComboStringList ();
-
+	}
+	void loadInitialComboBox(){
+		//add the initial spot to the avilableLandComboBox
+		avilableLandComboBox.ListView.Add("Spot1");
 	}
 
 	void loadInitialLandToListView(){
@@ -76,7 +81,8 @@ public class UIdataImporter : MonoBehaviour {
 		string nextFarmLandStatus = currentFarmLandList [_previousFarmLandUnlocked.indexOfTheLandOnTheList+1].landStatus;
 		//add this to be the next item on the listview below the one that has been unlocked
 		landInfoListView.Add ("Spot" + nextFarmlandSpotNumber +"   "+nextFarmLandStatus);
-		
+
+
 	}
 
 	void loadAllLandListToListView(){
@@ -144,14 +150,7 @@ public class UIdataImporter : MonoBehaviour {
 	}
 
 	public void updateFarmlandListView(){
-		//for keep the items on the landList up-to-date
-//		foreach (FarmLandUnitOnTheList c in currentFarmLandList) {
-//			
-//			Text itemString=GameObject.Find("farmLand"+c.indexOfTheLandOnTheList+"Text").GetComponent<Text>();
-//			
-//			itemString.text="Spot" + c.farmlandInfoOfTheSpot.landSpot + "   " + c.landStatus;
-//			
-//		}
+
 
 		if (isLandInfoListViewUpdating) {
 
@@ -161,19 +160,11 @@ public class UIdataImporter : MonoBehaviour {
 				farmLandInfoStringList.Add("Spot" + f.farmlandInfoOfTheSpot.landSpot + "   " + f.landStatus);
 			}
 
+
 			landInfoListView.Strings = farmLandInfoStringList;
 
 			isLandInfoListViewUpdating = false;
 		}
-
-	
-//		int currentSelectedIndex = landInfoListView.SelectedIndex;
-//
-//		//get the text under the selected item on the listview
-//		Text itemString=GameObject.Find("farmLand"+currentSelectedIndex+"Text").GetComponent<Text>();
-//		//update the text
-//		itemString.text="Spot" + currentFarmLandList[currentSelectedIndex].farmlandInfoOfTheSpot.landSpot + "   " + currentFarmLandList[currentSelectedIndex].landStatus;
-
 
 
 	}
@@ -246,40 +237,38 @@ public class UIdataImporter : MonoBehaviour {
 
 	void updateAvilableComboBoxList(){
 	
+		if (isAvilableComboBoxUpdating) {
+			comboBoxStringList.Clear();
+			foreach (FarmLandUnitOnTheList f in currentFarmLandList) {
 
-		foreach (FarmLandUnitOnTheList f in currentFarmLandList) {
+				if (f.isTheSpotEmpty) {
+					comboBoxStringList.Add("Spot" + f.farmlandInfoOfTheSpot.landSpot);
+				
 
-			if (f.isTheSpotEmpty) {
-				avilableLandComboBox.ListView.Add("Spot"+f.farmlandInfoOfTheSpot.landSpot);
-
+				}
 			}
+
+
+			avilableLandComboBox.ListView.Strings=comboBoxStringList;
+			isAvilableComboBoxUpdating=false;
 		}
 
 
-
 	}
 
-	void initializedComboStringList(){
-	
-		comboBoxStringList.Add("123");
-		comboBoxStringList.Add("321");
-		comboBoxStringList.Add("12345");
-		comboBoxStringList.Add("65432");
 
-
-
-	}
 	
 	// Update is called once per frame
 	void Update () {
 		Debug.Log ("isLandInfoListViewUpdating: " + isLandInfoListViewUpdating);
-		avilableLandComboBox.ListView.Strings = comboBoxStringList;
+		Debug.Log ("isComboBoxUpdating: " + isAvilableComboBoxUpdating);
 
-		landInfoListView.UpdateItems ();
-		landInfoListView.UpdateItems (); 
+
+
 //		Debug.Log ("SelectedIndex: " + CropInfoListView.SelectedIndex);
 		trackCropInfoListView ();
 		trackLandInfoListView ();
+		updateAvilableComboBoxList ();
 
 
 

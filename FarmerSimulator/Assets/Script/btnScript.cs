@@ -48,7 +48,7 @@ public class btnScript : MonoBehaviour {
 	//	check if the land is purchased and the button is on the state of "purchase"
 		if ((!(UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].isTheSpotPurchased))&&textOnBuyLandBtn.text=="Purchase") {
 			UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].isTheSpotPurchased=true;
-			//UIDataScript.updateFarmlandListView ();
+
 
 			//load the next farmland that is avalable to purchase
 			UIDataScript.loadTheNextLandOfListView(UIDataScript.currentFarmLandList[UIDataScript.currentFarmLandList.Count-1]);
@@ -57,7 +57,7 @@ public class btnScript : MonoBehaviour {
 
 
 		UIDataScript.isLandInfoListViewUpdating = true;
-
+		UIDataScript.isAvilableComboBoxUpdating = true;
 
 		//UIDataScript.landInfoListView.Add("test");
 
