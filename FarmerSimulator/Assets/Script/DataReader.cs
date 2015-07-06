@@ -14,6 +14,7 @@ public class DataReader : MonoBehaviour {
 
 	public List<Farmland> farmLandList;
 	public List<Crop> cropList;
+	Text txtFileLocationText;
 
 	// Use this for initialization
 	void Start () {
@@ -36,9 +37,9 @@ public class DataReader : MonoBehaviour {
 		//the text files can be modified any time and loaded next time when you run the program
 		LoadData (fileNameOfFarmLandTxt);
 		LoadData (fileNameOfCropInfoTxt);
-
+		txtFileLocationText = GameObject.Find ("txtFileLocationText").GetComponent<Text> ();
 		//GameObject.Find ("Text").GetComponent<Text> ().text = "count Farm: " + farmLandList.Count + "\ncount Crop: " + cropList.Count;
-
+		txtFileLocationText.text = "Path of .txt format input test file: "+Application.persistentDataPath;
 	}
 	
 	// Update is called once per frame

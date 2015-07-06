@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameInformation : MonoBehaviour {
 	float timer;
 
-	float timeIncreasingSpeed=5;
+	int timeIncreasingSpeed=1;
 	public bool isTimeRunning;
 	int daysCounter=0;
 	int pastDaysCounter;
@@ -24,6 +24,8 @@ public class GameInformation : MonoBehaviour {
 	Text moneyCanEarnPerDayText;
 	public bool isCalculatingMoneyCanEarnPerDay;
 	bool isMoneyIncreasing;
+	Text timeIncreasingText;
+
 	// Use this for initialization
 	void Start () {
 		timeProgressbar = GameObject.Find ("TimeProgressbar").GetComponent<Progressbar> ();
@@ -33,6 +35,7 @@ public class GameInformation : MonoBehaviour {
 		moneyText = GameObject.FindGameObjectWithTag ("MoneyText").GetComponent<Text> ();
 		UIdataScript = GameObject.Find ("ScriptContainer").GetComponent<UIdataImporter> ();
 		moneyCanEarnPerDayText = GameObject.FindGameObjectWithTag ("MoneyEarnPerDayText").GetComponent<Text> ();
+		timeIncreasingText = GameObject.Find ("IncreasingSpeedText").GetComponent<Text> ();
 
 
 	//	timeProgressbar.Value = 10;
@@ -43,9 +46,11 @@ public class GameInformation : MonoBehaviour {
 		moneyCanEarnPerDayText.text="Earn $"+moneyCanEarnPerDay+" per day";
 	}
 
+
+
 	// Update is called once per frame
 	void Update () {
-
+		debugInput ();
 		updateMoney ();
 		timerFunc ();
 		processBarForTimeFunc ();
@@ -55,6 +60,20 @@ public class GameInformation : MonoBehaviour {
 	//	Debug.Log ("moneyCanEarnPerDay: " + moneyCanEarnPerDay);
 //		Debug.Log("timer: "+(int)timer+ " day: "+daysCounter+" percentage: "+percentageOfProgressBar);
 		Debug.Log ("percentageOfProgressBar: " + percentageOfProgressBar);
+	}
+
+	void debugInput(){
+		if (Input.GetKeyDown (KeyCode.UpArrow)) {
+			moneyTotal += 5000;
+		} else if (Input.GetKeyDown (KeyCode.DownArrow)&&moneyTotal>5000) {
+			moneyTotal -= 5000;
+		} else if (Input.GetKeyDown (KeyCode.LeftArrow) && timeIncreasingSpeed > 1) {
+
+			timeIncreasingSpeed -= 1;
+		} else if (Input.GetKeyDown (KeyCode.RightArrow) && timeIncreasingSpeed < 5) {
+			timeIncreasingSpeed+=1;
+		}
+		timeIncreasingText.text = "Time Increasing Speed: " + timeIncreasingSpeed;
 	}
 
 	void timerFunc(){
