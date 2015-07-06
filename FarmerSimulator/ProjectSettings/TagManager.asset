@@ -11,6 +11,7 @@ TagManager:
   - TextOnBuyLandBtn
   - MoneyText
   - textOnBuyCropBtn
+  - inputFiledAtComboBox
   layers:
   - Default
   - TransparentFX

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class UIdataImporter : MonoBehaviour {
 	[SerializeField]
 	public ListView landInfoListView;
-	private ListView CropInfoListView;
+	public ListView CropInfoListView;
 	private Text textShowingOnCropInfoTab;
 	Dictionary<string,int> maxLevelDictionary;
 
@@ -15,7 +15,7 @@ public class UIdataImporter : MonoBehaviour {
 	int maxLandQuantity;
 	Text textOnBuyLandBtn;
 
-	Combobox avilableLandComboBox;
+	public Combobox avilableLandComboBox;
 	List<string> comboBoxStringList;
 	List<string> farmLandInfoStringList;
 
