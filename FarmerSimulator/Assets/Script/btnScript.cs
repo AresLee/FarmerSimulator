@@ -109,7 +109,7 @@ public class btnScript : MonoBehaviour {
 			//add the crop selected to the target spot
 			UIDataScript.currentFarmLandList[(int.Parse(targetFarmlandSpotNumber)-1)].cropInfoOfTheSpot=selectedCrop;
 			UIDataScript.currentFarmLandList[(int.Parse(targetFarmlandSpotNumber)-1)].isTheSpotEmpty=false;
-			UIDataScript.currentFarmLandList[(int.Parse(targetFarmlandSpotNumber)-1)].landStatus=selectedCrop.cropName+" is growing with $"+selectedCrop.cashOutputPerDay+" Output per day.";
+			UIDataScript.currentFarmLandList[(int.Parse(targetFarmlandSpotNumber)-1)].landStatus=selectedCrop.cropName+"(L."+selectedCrop.level+") is growing with $"+selectedCrop.cashOutputPerDay+" output per day.";
 
 		//	UIDataScript.avilableLandComboBox.ListView.Items.Remove(stringOfTargetFarmlandSpot);
 			inputFiledAtComboBox.text="";
@@ -119,6 +119,8 @@ public class btnScript : MonoBehaviour {
 		//refreshing the LandInfolistView and AvilableComboBox
 		UIDataScript.isLandInfoListViewUpdating = true;
 		UIDataScript.isAvilableComboBoxUpdating = true;
+
+	
 
 	}
 }

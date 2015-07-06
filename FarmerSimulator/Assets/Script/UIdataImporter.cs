@@ -256,7 +256,21 @@ public class UIdataImporter : MonoBehaviour {
 
 	}
 
+	public void showNotification(string _notifyContent){
+		var notification=UIWidgets.Notify.Template("NotifyTemplate");
+		notification.Show(
+			// Show notification with following text
+			_notifyContent,
+			// Hide it after 4.5 seconds
+			4.5f,null,null,
+			// Run specified animation on hide
+			UIWidgets.Notify.AnimationCollapse,
+			// without SlideUpOnHide
+			false
+			);
 
+	
+	}
 	
 	// Update is called once per frame
 	void Update () {
