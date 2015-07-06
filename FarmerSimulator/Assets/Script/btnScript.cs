@@ -162,6 +162,9 @@ public class btnScript : MonoBehaviour {
 					UIDataScript.isAvilableComboBoxUpdating = true;
 					//refresing moneyCanEarnPerDay
 					gameInformationScript.isCalculatingMoneyCanEarnPerDay=true;
+					//succesfully bought a crop
+
+					timeStartBtnFunc();
 				}
 
 				else{
@@ -179,7 +182,7 @@ public class btnScript : MonoBehaviour {
 			UIDataScript.showNotification("Please select an available empty farmland from the combo box!");
 		}
 
-
+	
 
 
 	
@@ -187,17 +190,21 @@ public class btnScript : MonoBehaviour {
 	}
 
 	public void sellBtnFunc(){
+		if (UIDataScript.landInfoListView.SelectedIndex!= -1) {
 
-		gameInformationScript.moneyTotal += UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].cropInfoOfTheSpot.costToPlant;
-		gameInformationScript.moneyCanEarnPerDay -= UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].cropInfoOfTheSpot.cashOutputPerDay;
+			gameInformationScript.moneyTotal += UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].cropInfoOfTheSpot.costToPlant;
+			gameInformationScript.moneyCanEarnPerDay -= UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].cropInfoOfTheSpot.cashOutputPerDay;
 
-		UIDataScript.currentFarmLandList[UIDataScript.landInfoListView.SelectedIndex].cropInfoOfTheSpot=null;
-		UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].isTheSpotEmpty = true;
-		UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].landStatus = "<Empty>";
-		gameInformationScript.isCalculatingMoneyCanEarnPerDay = true;
-		//refreshing the LandInfolistView and AvilableComboBox
-		UIDataScript.isLandInfoListViewUpdating = true;
-		UIDataScript.isAvilableComboBoxUpdating = true;
+			UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].cropInfoOfTheSpot = null;
+			UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].isTheSpotEmpty = true;
+			UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].landStatus = "<Empty>";
+			gameInformationScript.isCalculatingMoneyCanEarnPerDay = true;
+			//refreshing the LandInfolistView and AvilableComboBox
+			UIDataScript.isLandInfoListViewUpdating = true;
+			UIDataScript.isAvilableComboBoxUpdating = true;
+		} else {
+			UIDataScript.showNotification("Please select a crop to sell!");
+		}
 	}
 }
 
