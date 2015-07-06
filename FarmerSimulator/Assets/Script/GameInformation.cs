@@ -10,10 +10,13 @@ public class GameInformation : MonoBehaviour {
 	int daysCounter=0;
 	float percentageOfProgressBar;
 	Text textOnProgressBar;
+	public int moneyTotal=5000;
 	Text textBelowProgressBar;
 
 
 	private Progressbar timeProgressbar;
+
+	Text moneyText;
 
 	// Use this for initialization
 	void Start () {
@@ -21,11 +24,20 @@ public class GameInformation : MonoBehaviour {
 		timeProgressbar.Max = 100;
 		textOnProgressBar = GameObject.FindGameObjectWithTag ("TextOnProgressBar").GetComponent<Text> ();
 		textBelowProgressBar=GameObject.FindGameObjectWithTag ("TextbelowProgressBar").GetComponent<Text> ();
+		moneyText = GameObject.FindGameObjectWithTag ("MoneyText").GetComponent<Text> ();
+
+
 	//	timeProgressbar.Value = 10;
 	}
-	
+
+	void updateMoney(){
+		moneyText.text ="$ "+moneyTotal.ToString();
+	}
+
 	// Update is called once per frame
 	void Update () {
+
+		updateMoney ();
 		timerFunc ();
 		processBarForTimeFunc ();
 //		Debug.Log("timer: "+(int)timer+ " day: "+daysCounter+" percentage: "+percentageOfProgressBar);

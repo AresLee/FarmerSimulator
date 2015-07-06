@@ -40,15 +40,24 @@ public class btnScript : MonoBehaviour {
 
 	public void buyLandBtn(){
 
-	//	UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].isTheSpotPurchased;
 
-		//check if the land is purchased and the button is on the state of "purchase"
+
+	//	check if the land is purchased and the button is on the state of "purchase"
 		if ((!(UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].isTheSpotPurchased))&&textOnBuyLandBtn.text=="Purchase") {
 			UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].isTheSpotPurchased=true;
 
+
+			//load the next farmland that is avalable to purchase
+			UIDataScript.loadTheNextLandOfListView(UIDataScript.currentFarmLandList[UIDataScript.currentFarmLandList.Count-1]);
 		}
 
-		//UIDataScript.landInfoListView.SelectedIndex
+
+
+
+
+		//UIDataScript.landInfoListView.Add("test");
+
+		//need to find a way to walk around the limited listview items issue. might initialized all the farmland first and change the strings
 	}
 }
 

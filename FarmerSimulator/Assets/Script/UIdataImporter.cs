@@ -24,7 +24,8 @@ public class UIdataImporter : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		landInfoListView = GameObject.Find ("LandListView").GetComponent<ListView> ();
+		landInfoListView = GameObject.Find ("LandListView").GetComponent<ListView> (); 
+		//landInfoListView = GameObject.Find ("ListView").GetComponent<ListView> (); 
 		CropInfoListView = GameObject.Find ("CropListView").GetComponent<ListView> ();
 		dataReaderScript = GameObject.Find ("ScriptContainer").GetComponent<DataReader> ();
 		textShowingOnCropInfoTab = GameObject.FindGameObjectWithTag ("CropInfoTabText").GetComponent<Text> ();
@@ -48,19 +49,24 @@ public class UIdataImporter : MonoBehaviour {
 	}
 
 	void loadInitialLandToListView(){
+		//add the 1st farmlandInfo from the whole farmlandInfo to the currentFarmlandList
 		currentFarmLandList.Add(new FarmLandUnitOnTheList(true,0,dataReaderScript.farmLandList[0]));
 
 		int initialFarmlandSpotNumber = currentFarmLandList [0].farmlandInfoOfTheSpot.landSpot;
 		string initialFarmLandStatus = currentFarmLandList [0].landStatus;
+		//add the first farmland spot info to the 1st item on the listview
 		landInfoListView.Add ("Spot" + initialFarmlandSpotNumber +"   "+initialFarmLandStatus);
+		//load the next spot locked
 		loadTheNextLandOfListView (currentFarmLandList[0]);
 	}
 
 	//next farmLandSpot is the spot that can be unlocked 
-	void loadTheNextLandOfListView(FarmLandUnitOnTheList _previousFarmLandUnlocked){
+	public void loadTheNextLandOfListView(FarmLandUnitOnTheList _previousFarmLandUnlocked){
+		//add the next landspot info to the currentFarmLandList 
 		currentFarmLandList.Add(new FarmLandUnitOnTheList(false,_previousFarmLandUnlocked.indexOfTheLandOnTheList+1,dataReaderScript.farmLandList[_previousFarmLandUnlocked.indexOfTheLandOnTheList+1]));
 		int nextFarmlandSpotNumber = currentFarmLandList [_previousFarmLandUnlocked.indexOfTheLandOnTheList+1].farmlandInfoOfTheSpot.landSpot;
 		string nextFarmLandStatus = currentFarmLandList [_previousFarmLandUnlocked.indexOfTheLandOnTheList+1].landStatus;
+		//add this to be the next item on the listview below the one that has been unlocked
 		landInfoListView.Add ("Spot" + nextFarmlandSpotNumber +"   "+nextFarmLandStatus);
 		
 	}
@@ -87,10 +93,11 @@ public class UIdataImporter : MonoBehaviour {
 		if (landInfoListView.SelectedIndex != -1) {
 			var selectedFarmItem = currentFarmLandList [landInfoListView.SelectedIndex];
 
+			//selected item not purchased
 			if (!selectedFarmItem.isTheSpotPurchased) {
 				textOnBuyLandBtn.text = "Purchase";
 
-
+			//selected item purchased
 			} else {
 				//check if the land purchased has any crop and update the function of the BuyLandBtn
 				if (selectedFarmItem.cropInfoOfTheSpot != null) {
@@ -101,6 +108,9 @@ public class UIdataImporter : MonoBehaviour {
 					//the land will be empty once purchasing because there is no crop on it initially
 					currentFarmLandList [landInfoListView.SelectedIndex].isTheSpotEmpty = true;
 					currentFarmLandList [landInfoListView.SelectedIndex].landStatus="<Empty>";
+					textOnBuyLandBtn.text = "Select";
+
+			
 				}
 
 			
@@ -109,15 +119,39 @@ public class UIdataImporter : MonoBehaviour {
 
 
 			//for keep the items on the landList up-to-date
-			foreach (FarmLandUnitOnTheList c in currentFarmLandList) {
-		
-				Text itemString=GameObject.Find("farmLand"+c.indexOfTheLandOnTheList+"Text").GetComponent<Text>();
+//			foreach (FarmLandUnitOnTheList c in currentFarmLandList) {
+//		
+//				Text itemString=GameObject.Find("farmLand"+c.indexOfTheLandOnTheList+"Text").GetComponent<Text>();
+//
+//				itemString.text="Spot" + c.farmlandInfoOfTheSpot.landSpot + "   " + c.landStatus;
+//			
+//			}
+			//updateFarmlandListView();
 
-				itemString.text="Spot" + c.farmlandInfoOfTheSpot.landSpot + "   " + c.landStatus;
-			
-			}
+			Debug.Log(landInfoListView.ScrollRect.verticalScrollbar.size);
 
 		}
+	}
+
+	public void updateFarmlandListView(){
+		//for keep the items on the landList up-to-date
+//		foreach (FarmLandUnitOnTheList c in currentFarmLandList) {
+//			
+//			Text itemString=GameObject.Find("farmLand"+c.indexOfTheLandOnTheList+"Text").GetComponent<Text>();
+//			
+//			itemString.text="Spot" + c.farmlandInfoOfTheSpot.landSpot + "   " + c.landStatus;
+//			
+//		}
+
+		int currentSelectedIndex = landInfoListView.SelectedIndex;
+
+		//get the text under the selected item on the listview
+		Text itemString=GameObject.Find("farmLand"+currentSelectedIndex+"Text").GetComponent<Text>();
+		//update the text
+		itemString.text="Spot" + currentFarmLandList[currentSelectedIndex].farmlandInfoOfTheSpot.landSpot + "   " + currentFarmLandList[currentSelectedIndex].landStatus;
+
+
+
 	}
 
 
@@ -196,6 +230,8 @@ public class UIdataImporter : MonoBehaviour {
 //		Debug.Log ("SelectedIndex: " + CropInfoListView.SelectedIndex);
 		trackCropInfoListView ();
 		trackLandInfoListView ();
+
+
 
 
 
