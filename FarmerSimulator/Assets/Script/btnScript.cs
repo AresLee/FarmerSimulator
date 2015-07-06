@@ -12,6 +12,7 @@ public class btnScript : MonoBehaviour {
 	InputField inputFiledAtComboBox;
 	Button buyLandButton;
 
+
 	// Use this for initialization
 	void Start () {
 	
@@ -22,7 +23,7 @@ public class btnScript : MonoBehaviour {
 		dataReaderScript = GameObject.Find ("ScriptContainer").GetComponent<DataReader> ();
 		inputFiledAtComboBox = GameObject.FindGameObjectWithTag ("inputFiledAtComboBox").GetComponent<InputField> ();
 		buyLandButton = GameObject.Find ("BuyLandBtn").GetComponent<Button> ();
-			
+
 	}
 	
 	// Update is called once per frame
@@ -183,6 +184,20 @@ public class btnScript : MonoBehaviour {
 
 	
 
+	}
+
+	public void sellBtnFunc(){
+
+		gameInformationScript.moneyTotal += UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].cropInfoOfTheSpot.costToPlant;
+		gameInformationScript.moneyCanEarnPerDay -= UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].cropInfoOfTheSpot.cashOutputPerDay;
+
+		UIDataScript.currentFarmLandList[UIDataScript.landInfoListView.SelectedIndex].cropInfoOfTheSpot=null;
+		UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].isTheSpotEmpty = true;
+		UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].landStatus = "<Empty>";
+		gameInformationScript.isCalculatingMoneyCanEarnPerDay = true;
+		//refreshing the LandInfolistView and AvilableComboBox
+		UIDataScript.isLandInfoListViewUpdating = true;
+		UIDataScript.isAvilableComboBoxUpdating = true;
 	}
 }
 

@@ -21,9 +21,7 @@ public class UIdataImporter : MonoBehaviour {
 
 	public bool isLandInfoListViewUpdating;
 	public bool isAvilableComboBoxUpdating;
-//	[SerializeField]
-//	Sprite landIcon;
-
+	Button sellBtn;
 
 
 	DataReader dataReaderScript;
@@ -44,6 +42,7 @@ public class UIdataImporter : MonoBehaviour {
 		avilableLandComboBox = GameObject.Find ("Combobox").GetComponent<Combobox> ();
 		comboBoxStringList = new List<string> ();
 		farmLandInfoStringList = new List<string> ();
+		sellBtn = GameObject.Find ("SellCropBtn").GetComponent<Button> ();
 
 
 		textShowingOnCropInfoTab.text="Welcome to the Fantacsy Farmer Simulator!";
@@ -54,7 +53,7 @@ public class UIdataImporter : MonoBehaviour {
 		loadCropListToListView ();
 		loadInitialComboBox ();
 	
-
+		sellBtn.gameObject.SetActive (false);
 	}
 	void loadInitialComboBox(){
 		//add the initial spot to the avilableLandComboBox
@@ -119,8 +118,10 @@ public class UIdataImporter : MonoBehaviour {
 
 
 
+
 					//add specific output for specific crop
 				} else {
+
 					//the land will be empty once purchasing because there is no crop on it initially
 					currentFarmLandList [landInfoListView.SelectedIndex].isTheSpotEmpty = true;
 					currentFarmLandList [landInfoListView.SelectedIndex].landStatus="<Empty>";
@@ -147,6 +148,21 @@ public class UIdataImporter : MonoBehaviour {
 
 
 		}
+	}
+
+	void updateSellBtnStatus(){
+		if (textOnBuyLandBtn.text == "Upgrade") {
+			sellBtn.gameObject.SetActive (true);
+		} else {
+			sellBtn.gameObject.SetActive(false);
+		}
+
+//		if (GameObject.Find ("BuyLandBtn").GetComponent<Button> ().gameObject.activeInHierarchy) {
+//			sellBtn.gameObject.SetActive (true);
+//		} else {
+//			sellBtn.gameObject.SetActive (false);
+//		}
+
 	}
 
 	public void updateFarmlandListView(){
@@ -283,7 +299,7 @@ public class UIdataImporter : MonoBehaviour {
 		trackCropInfoListView ();
 		trackLandInfoListView ();
 		updateAvilableComboBoxList ();
-
+		updateSellBtnStatus ();
 
 
 
