@@ -28,7 +28,7 @@ public class GameInformation : MonoBehaviour {
 	void Update () {
 		timerFunc ();
 		processBarForTimeFunc ();
-		Debug.Log("timer: "+(int)timer+ " day: "+daysCounter+" percentage: "+percentageOfProgressBar);
+//		Debug.Log("timer: "+(int)timer+ " day: "+daysCounter+" percentage: "+percentageOfProgressBar);
 	}
 
 	void timerFunc(){
@@ -57,9 +57,9 @@ public class GameInformation : MonoBehaviour {
 public class FarmLandUnitOnTheList{
 	public Farmland farmlandInfoOfTheSpot;
 	public Crop cropInfoOfTheSpot;
-	bool isTheSpotEmpty;
-	bool isTheSpotPurchased;
-	int indexOfTheLandOnTheList;
+	public bool isTheSpotEmpty;
+	public bool isTheSpotPurchased;
+	public int indexOfTheLandOnTheList;
 	int maxLevelOfTheCrop;
 	int currentLevelOfTheCrop;
 	int theFarmLandCost;
@@ -68,10 +68,11 @@ public class FarmLandUnitOnTheList{
 
 
 	public FarmLandUnitOnTheList(bool _isTheSpotPurchased,int _indexOfTheLandOnTheList,Farmland _farmlandInfoOfTheSpot){
-
+		isTheSpotPurchased = _isTheSpotPurchased;
+		indexOfTheLandOnTheList = _indexOfTheLandOnTheList;
 
 		farmlandInfoOfTheSpot = _farmlandInfoOfTheSpot;
-		if (!_isTheSpotPurchased) {
+		if (!isTheSpotPurchased) {
 			isTheSpotEmpty=false;
 
 		} else {

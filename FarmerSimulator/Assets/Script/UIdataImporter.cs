@@ -6,12 +6,14 @@ using System.Collections.Generic;
 
 public class UIdataImporter : MonoBehaviour {
 	[SerializeField]
-	private ListView landInfoListView;
+	public ListView landInfoListView;
 	private ListView CropInfoListView;
 	private Text textShowingOnCropInfoTab;
 	Dictionary<string,int> maxLevelDictionary;
 
-	List<FarmLandUnitOnTheList> currentFarmLandList;
+	public List<FarmLandUnitOnTheList> currentFarmLandList;
+	int maxLandQuantity;
+	Text textOnBuyLandBtn;
 
 //	[SerializeField]
 //	Sprite landIcon;
@@ -26,10 +28,12 @@ public class UIdataImporter : MonoBehaviour {
 		CropInfoListView = GameObject.Find ("CropListView").GetComponent<ListView> ();
 		dataReaderScript = GameObject.Find ("ScriptContainer").GetComponent<DataReader> ();
 		textShowingOnCropInfoTab = GameObject.FindGameObjectWithTag ("CropInfoTabText").GetComponent<Text> ();
+		textOnBuyLandBtn = GameObject.FindGameObjectWithTag ("TextOnBuyLandBtn").GetComponent<Text> ();
 		//maxLevelDictionary stores the max level of each kind of crop
 		maxLevelDictionary=new Dictionary<string, int>();
 		//the current farmland information list
 		currentFarmLandList = new List<FarmLandUnitOnTheList> ();
+		maxLandQuantity = dataReaderScript.farmLandList.Count;//start from 1
 
 
 		textShowingOnCropInfoTab.text="Welcome to the Fantacsy Farmer Simulator!";
@@ -49,6 +53,16 @@ public class UIdataImporter : MonoBehaviour {
 		int initialFarmlandSpotNumber = currentFarmLandList [0].farmlandInfoOfTheSpot.landSpot;
 		string initialFarmLandStatus = currentFarmLandList [0].landStatus;
 		landInfoListView.Add ("Spot" + initialFarmlandSpotNumber +"   "+initialFarmLandStatus);
+		loadTheNextLandOfListView (currentFarmLandList[0]);
+	}
+
+	//next farmLandSpot is the spot that can be unlocked 
+	void loadTheNextLandOfListView(FarmLandUnitOnTheList _previousFarmLandUnlocked){
+		currentFarmLandList.Add(new FarmLandUnitOnTheList(false,_previousFarmLandUnlocked.indexOfTheLandOnTheList+1,dataReaderScript.farmLandList[_previousFarmLandUnlocked.indexOfTheLandOnTheList+1]));
+		int nextFarmlandSpotNumber = currentFarmLandList [_previousFarmLandUnlocked.indexOfTheLandOnTheList+1].farmlandInfoOfTheSpot.landSpot;
+		string nextFarmLandStatus = currentFarmLandList [_previousFarmLandUnlocked.indexOfTheLandOnTheList+1].landStatus;
+		landInfoListView.Add ("Spot" + nextFarmlandSpotNumber +"   "+nextFarmLandStatus);
+		
 	}
 
 	void loadAllLandListToListView(){
@@ -66,6 +80,45 @@ public class UIdataImporter : MonoBehaviour {
 	
 	}
 
+	void trackLandInfoListView(){
+
+
+		//for tracking selecting item of landInfoListView and update the function of the BuyLandBtn
+		if (landInfoListView.SelectedIndex != -1) {
+			var selectedFarmItem = currentFarmLandList [landInfoListView.SelectedIndex];
+
+			if (!selectedFarmItem.isTheSpotPurchased) {
+				textOnBuyLandBtn.text = "Purchase";
+
+
+			} else {
+				//check if the land purchased has any crop and update the function of the BuyLandBtn
+				if (selectedFarmItem.cropInfoOfTheSpot != null) {
+					textOnBuyLandBtn.text = "Upgrade";
+
+					//add specific output for specific crop
+				} else {
+					//the land will be empty once purchasing because there is no crop on it initially
+					currentFarmLandList [landInfoListView.SelectedIndex].isTheSpotEmpty = true;
+					currentFarmLandList [landInfoListView.SelectedIndex].landStatus="<Empty>";
+				}
+
+			
+
+			}
+
+
+			//for keep the items on the landList up-to-date
+			foreach (FarmLandUnitOnTheList c in currentFarmLandList) {
+		
+				Text itemString=GameObject.Find("farmLand"+c.indexOfTheLandOnTheList+"Text").GetComponent<Text>();
+
+				itemString.text="Spot" + c.farmlandInfoOfTheSpot.landSpot + "   " + c.landStatus;
+			
+			}
+
+		}
+	}
 
 
 	//this function load crop info to the listview and store the max value of each kind of crop
@@ -89,9 +142,7 @@ public class UIdataImporter : MonoBehaviour {
 				CropInfoListView.Add (c.cropName+"    (L."+c.level+")");
 		
 
-		
-			
-			
+
 		}
 
 	}
@@ -138,10 +189,14 @@ public class UIdataImporter : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	
+
+		landInfoListView.UpdateItems ();
+		landInfoListView.UpdateItems (); 
 //		Debug.Log ("SelectedIndex: " + CropInfoListView.SelectedIndex);
 		trackCropInfoListView ();
-//		var indicies = landInfoListView.SelectedIndicies;
-//		Debug.Log("indicies: "+string.Join(", ", indicies.ConvertAll(x => x.ToString()).ToArray()));
+		trackLandInfoListView ();
+
 
 
 	}

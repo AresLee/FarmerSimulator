@@ -8,6 +8,7 @@ TagManager:
   - TimeStartButton
   - TextOnProgressBar
   - TextbelowProgressBar
+  - TextOnBuyLandBtn
   layers:
   - Default
   - TransparentFX
