@@ -135,18 +135,6 @@ public class UIdataImporter : MonoBehaviour {
 			}
 
 
-			//for keep the items on the landList up-to-date
-//			foreach (FarmLandUnitOnTheList c in currentFarmLandList) {
-//		
-//				Text itemString=GameObject.Find("farmLand"+c.indexOfTheLandOnTheList+"Text").GetComponent<Text>();
-//
-//				itemString.text="Spot" + c.farmlandInfoOfTheSpot.landSpot + "   " + c.landStatus;
-//			
-//			}
-			//updateFarmlandListView();
-
-
-
 		}
 	}
 
@@ -156,12 +144,6 @@ public class UIdataImporter : MonoBehaviour {
 		} else {
 			sellBtn.gameObject.SetActive(false);
 		}
-
-//		if (GameObject.Find ("BuyLandBtn").GetComponent<Button> ().gameObject.activeInHierarchy) {
-//			sellBtn.gameObject.SetActive (true);
-//		} else {
-//			sellBtn.gameObject.SetActive (false);
-//		}
 
 	}
 
@@ -291,12 +273,7 @@ public class UIdataImporter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-//		Debug.Log ("isLandInfoListViewUpdating: " + isLandInfoListViewUpdating);
-//		Debug.Log ("isComboBoxUpdating: " + isAvilableComboBoxUpdating);
 
-
-
-//		Debug.Log ("SelectedIndex: " + CropInfoListView.SelectedIndex);
 		trackCropInfoListView ();
 		trackLandInfoListView ();
 		updateAvilableComboBoxList ();

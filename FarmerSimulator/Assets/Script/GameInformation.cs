@@ -55,10 +55,8 @@ public class GameInformation : MonoBehaviour {
 		timerFunc ();
 		processBarForTimeFunc ();
 
-
 		calculateMoneyCanEarnPerDay ();
-	//	Debug.Log ("moneyCanEarnPerDay: " + moneyCanEarnPerDay);
-//		Debug.Log("timer: "+(int)timer+ " day: "+daysCounter+" percentage: "+percentageOfProgressBar);
+
 		Debug.Log ("percentageOfProgressBar: " + percentageOfProgressBar);
 	}
 
