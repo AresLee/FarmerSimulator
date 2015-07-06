@@ -9,7 +9,7 @@ public class UIdataImporter : MonoBehaviour {
 	public ListView landInfoListView;
 	public ListView CropInfoListView;
 	private Text textShowingOnCropInfoTab;
-	Dictionary<string,int> maxLevelDictionary;
+	public Dictionary<string,int> maxLevelDictionary;
 
 	public List<FarmLandUnitOnTheList> currentFarmLandList;
 	int maxLandQuantity;
@@ -176,7 +176,7 @@ public class UIdataImporter : MonoBehaviour {
 
 		foreach (var c in dataReaderScript.cropList) {
 
-
+			//calculate the max level for each crop
 			if (!maxLevelDictionary.ContainsKey(c.cropName)) {
 
 				maxLevelDictionary.Add(c.cropName,c.level);
@@ -274,8 +274,8 @@ public class UIdataImporter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log ("isLandInfoListViewUpdating: " + isLandInfoListViewUpdating);
-		Debug.Log ("isComboBoxUpdating: " + isAvilableComboBoxUpdating);
+//		Debug.Log ("isLandInfoListViewUpdating: " + isLandInfoListViewUpdating);
+//		Debug.Log ("isComboBoxUpdating: " + isAvilableComboBoxUpdating);
 
 
 

@@ -12,6 +12,7 @@ TagManager:
   - MoneyText
   - textOnBuyCropBtn
   - inputFiledAtComboBox
+  - MoneyEarnPerDayText
   layers:
   - Default
   - TransparentFX

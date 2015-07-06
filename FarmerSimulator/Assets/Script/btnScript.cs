@@ -10,6 +10,7 @@ public class btnScript : MonoBehaviour {
 	Text textOnBuyLandBtn;
 	DataReader dataReaderScript;
 	InputField inputFiledAtComboBox;
+	Button buyLandButton;
 
 	// Use this for initialization
 	void Start () {
@@ -20,14 +21,19 @@ public class btnScript : MonoBehaviour {
 		textOnBuyLandBtn = GameObject.FindGameObjectWithTag ("TextOnBuyLandBtn").GetComponent<Text> ();
 		dataReaderScript = GameObject.Find ("ScriptContainer").GetComponent<DataReader> ();
 		inputFiledAtComboBox = GameObject.FindGameObjectWithTag ("inputFiledAtComboBox").GetComponent<InputField> ();
+		buyLandButton = GameObject.Find ("BuyLandBtn").GetComponent<Button> ();
 			
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	//	Debug.Log (gameInformationScript.isTimeRunning);
 
-
+		//the buyLandButton will be disappear if nothing is selected on the landInfoListView
+		if (UIDataScript.landInfoListView.SelectedIndex == -1) {
+			buyLandButton.gameObject.SetActive (false);
+		} else {
+			buyLandButton.gameObject.SetActive (true);
+		}
 
 	}
 
@@ -54,13 +60,23 @@ public class btnScript : MonoBehaviour {
 
 	//	check if the land is purchased and the button is on the state of "purchase"
 		if ((!(UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].isTheSpotPurchased))&&textOnBuyLandBtn.text=="Purchase") {
-			UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].isTheSpotPurchased=true;
 
 
-			//load the next farmland that is avalable to purchase
-			UIDataScript.loadTheNextLandOfListView(UIDataScript.currentFarmLandList[UIDataScript.currentFarmLandList.Count-1]);
-		
+			//make sure user has enough money to purhcase
+			if (gameInformationScript.moneyTotal>=UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].farmlandInfoOfTheSpot.costToPurchase) {
+				UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].isTheSpotPurchased=true;
+				//load the next farmland that is avalable to purchase
+				UIDataScript.loadTheNextLandOfListView(UIDataScript.currentFarmLandList[UIDataScript.currentFarmLandList.Count-1]);
+				//cost money
+				gameInformationScript.moneyTotal-=UIDataScript.currentFarmLandList [UIDataScript.landInfoListView.SelectedIndex].farmlandInfoOfTheSpot.costToPurchase;
+			}else{
+				UIDataScript.showNotification("Sorry, you don't have enough money to buy this. See you next time!");
+
+			}
+
 		}
+
+
 
 		if (textOnBuyLandBtn.text=="Select") {
 
@@ -78,6 +94,34 @@ public class btnScript : MonoBehaviour {
 
 		}
 
+		if (textOnBuyLandBtn.text=="Upgrade") {
+			// to do...
+
+			var selectedCrop=UIDataScript.currentFarmLandList[UIDataScript.landInfoListView.SelectedIndex].cropInfoOfTheSpot;
+
+			int maxLevelOfSelectedCrop=UIDataScript.maxLevelDictionary[selectedCrop.cropName];
+			if (selectedCrop.level<maxLevelOfSelectedCrop) {
+				int counter=0;
+				foreach (Crop c in dataReaderScript.cropList) {
+
+					if (c.cropName==selectedCrop.cropName&&c.level==selectedCrop.level) {
+						UIDataScript.currentFarmLandList[UIDataScript.landInfoListView.SelectedIndex].cropInfoOfTheSpot=dataReaderScript.cropList[counter+1];
+
+						UIDataScript.currentFarmLandList[UIDataScript.landInfoListView.SelectedIndex].landStatus = selectedCrop.cropName + "(L." + dataReaderScript.cropList[counter+1].level + ") is growing with $" + dataReaderScript.cropList[counter+1].cashOutputPerDay + " output per day.";
+						gameInformationScript.isCalculatingMoneyCanEarnPerDay=true;
+					}
+					counter+=1;
+				}
+			}
+			else{
+
+				UIDataScript.showNotification("Sorry, Level."+selectedCrop.level+" is the max level for "+selectedCrop.cropName);
+			}
+
+
+			
+		}
+
 
 
 		//refreshing the LandInfolistView and AvilableComboBox
@@ -93,32 +137,49 @@ public class btnScript : MonoBehaviour {
 			//get the select crop from the cropInfoListview
 			var selectedCrop = dataReaderScript.cropList [UIDataScript.CropInfoListView.SelectedIndex];
 
-			gameInformationScript.moneyTotal -= selectedCrop.costToPlant;
+			//Only level 1 crop can be planted to an empty farmland
+			if (!(selectedCrop.level>1)) {
+
+				if (selectedCrop.costToPlant<=gameInformationScript.moneyTotal) {
+
+					gameInformationScript.moneyTotal -= selectedCrop.costToPlant;
+					
+					string stringOfTargetFarmlandSpot = UIDataScript.avilableLandComboBox.ListView.Strings [UIDataScript.avilableLandComboBox.ListView.SelectedIndex];
+					
+					var targetFarmlandSpotNumber = Regex.Match (stringOfTargetFarmlandSpot, @"\d+$").Value;
+					
+					//add the crop selected to the target spot
+					UIDataScript.currentFarmLandList [(int.Parse (targetFarmlandSpotNumber) - 1)].cropInfoOfTheSpot = selectedCrop;
+					UIDataScript.currentFarmLandList [(int.Parse (targetFarmlandSpotNumber) - 1)].isTheSpotEmpty = false;
+					UIDataScript.currentFarmLandList [(int.Parse (targetFarmlandSpotNumber) - 1)].landStatus = selectedCrop.cropName + "(L." + selectedCrop.level + ") is growing with $" + selectedCrop.cashOutputPerDay + " output per day.";
+					
+					//	UIDataScript.avilableLandComboBox.ListView.Items.Remove(stringOfTargetFarmlandSpot);
+					inputFiledAtComboBox.text = "";
+					
+					//refreshing the LandInfolistView and AvilableComboBox
+					UIDataScript.isLandInfoListViewUpdating = true;
+					UIDataScript.isAvilableComboBoxUpdating = true;
+					//refresing moneyCanEarnPerDay
+					gameInformationScript.isCalculatingMoneyCanEarnPerDay=true;
+				}
+
+				else{
+					UIDataScript.showNotification("Sorry, you don't have enough money to buy this. See you next time!");
+				}
+			}else{
+				UIDataScript.showNotification("Only level 1 crop can be planted to an empty farmland!");
+
+			}
 
 
-
-			//		string testString="Spot6";
-			//
-			//		var result = Regex.Match (testString, @"\d+$").Value;
-			//		Debug.Log ("number: " + result);
-
-			string stringOfTargetFarmlandSpot=UIDataScript.avilableLandComboBox.ListView.Strings[UIDataScript.avilableLandComboBox.ListView.SelectedIndex];
-
-			var targetFarmlandSpotNumber=Regex.Match(stringOfTargetFarmlandSpot, @"\d+$").Value;
-
-			//add the crop selected to the target spot
-			UIDataScript.currentFarmLandList[(int.Parse(targetFarmlandSpotNumber)-1)].cropInfoOfTheSpot=selectedCrop;
-			UIDataScript.currentFarmLandList[(int.Parse(targetFarmlandSpotNumber)-1)].isTheSpotEmpty=false;
-			UIDataScript.currentFarmLandList[(int.Parse(targetFarmlandSpotNumber)-1)].landStatus=selectedCrop.cropName+"(L."+selectedCrop.level+") is growing with $"+selectedCrop.cashOutputPerDay+" output per day.";
-
-		//	UIDataScript.avilableLandComboBox.ListView.Items.Remove(stringOfTargetFarmlandSpot);
-			inputFiledAtComboBox.text="";
 		
+		} else {
+
+			UIDataScript.showNotification("Please select an available empty farmland from the combo box!");
 		}
 
-		//refreshing the LandInfolistView and AvilableComboBox
-		UIDataScript.isLandInfoListViewUpdating = true;
-		UIDataScript.isAvilableComboBoxUpdating = true;
+
+
 
 	
 
